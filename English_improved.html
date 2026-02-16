@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tug of War: English - Grade 3</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #e3f5ff 0%, #b8e6ff 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .top-bar {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .home-btn {
+            background: white;
+            color: #4facfe;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .title-section {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .game-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2196F3;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1800px;
+            margin: 0 auto;
+            align-items: start;
+        }
+
+        .team-panel {
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            min-height: 450px;
+            width: 100%;
+        }
+
+        .team1-panel {
+            background: linear-gradient(135deg, #64B5F6 0%, #42A5F5 100%);
+        }
+
+        .team2-panel {
+            background: linear-gradient(135deg, #EF5350 0%, #E53935 100%);
+        }
+
+        .team-header {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .team-name {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .team1-panel .team-name {
+            color: #1976D2;
+        }
+
+        .team2-panel .team-name {
+            color: #D32F2F;
+        }
+
+        .score-badge {
+            background: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .team1-panel .score-badge {
+            color: #1976D2;
+            border: 4px solid #1976D2;
+        }
+
+        .team2-panel .score-badge {
+            color: #D32F2F;
+            border: 4px solid #D32F2F;
+        }
+
+        .question-box {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            min-height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .question-text {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .option-btn {
+            background: white;
+            border: 3px solid #ddd;
+            border-radius: 12px;
+            padding: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #333;
+            text-align: center;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            border-color: #999;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .option-btn.correct {
+            background: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+            animation: correctPulse 0.5s;
+        }
+
+        .option-btn.incorrect {
+            background: #f44336;
+            color: white;
+            border-color: #f44336;
+            animation: incorrectShake 0.5s;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes incorrectShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .question-counter {
+            text-align: center;
+            color: white;
+            font-size: 1.2em;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .start-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .start-screen h1 {
+            font-size: 4em;
+            color: white;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+
+        .play-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 25px 60px;
+            font-size: 2em;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+        }
+
+        .play-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+        }
+
+        .game-over {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .game-over-content {
+            background: white;
+            padding: 50px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+        }
+
+        .game-over h2 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .game-over p {
+            font-size: 1.5em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .playground {
+            grid-column: 1 / -1;
+            background: linear-gradient(to bottom, #87CEEB 0%, #90EE90 70%, #8B4513 70%, #8B4513 100%);
+            border-radius: 20px;
+            padding: 30px;
+            min-height: 250px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .rope-container {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 15px;
+            transform: translateY(-50%);
+        }
+
+        .rope {
+            position: absolute;
+            top: 0;
+            left: 10%;
+            right: 10%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                90deg,
+                #8B4513 0px,
+                #A0522D 10px,
+                #8B4513 20px
+            );
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .character {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4em;
+            transition: left 0.5s ease;
+            filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.3));
+        }
+
+        .team1-character {
+            left: 15%;
+        }
+
+        .team2-character {
+            left: 85%;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: rgba(255,255,255,0.9);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .status-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-label {
+            font-size: 0.9em;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .status-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .timer {
+            color: #2196F3;
+        }
+
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .question-text {
+                font-size: 2em;
+            }
+            
+            .character {
+                font-size: 3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <button class="home-btn" onclick="location.href='index.html'">
+            🏠 Home
+        </button>
+        <div style="color: white; font-size: 1.3em; font-weight: bold;">English Tug of War</div>
+        <div style="width: 150px;"></div>
+    </div>
+
+    <div class="start-screen" id="startScreen">
+        <h1>🎮 ENGLISH TUG OF WAR 🎮</h1>
+        <button class="play-btn" onclick="startGame()">PLAY GAME</button>
+    </div>
+
+    <div class="game-over" id="gameOver">
+        <div class="game-over-content">
+            <h2 id="winnerText">🏆 WINNER 🏆</h2>
+            <p id="finalScore">Final Score</p>
+            <button class="play-btn" onclick="restartGame()">PLAY AGAIN</button>
+        </div>
+    </div>
+
+    <div class="title-section">
+        <div class="game-title">English Challenge - Grade 3</div>
+    </div>
+
+    <div class="main-container">
+        <div class="playground">
+            <div class="rope-container">
+                <div class="rope"></div>
+                <div class="character team1-character" id="team1Character">🔵</div>
+                <div class="character team2-character" id="team2Character">🔴</div>
+            </div>
+        </div>
+
+        <div class="team-panel team1-panel">
+            <div class="team-header">
+                <div class="team-name">TEAM 1</div>
+                <div class="score-badge" id="team1ScoreBadge">0</div>
+            </div>
+            
+            <div class="question-box">
+                <div class="question-text" id="team1Question">Question will appear here</div>
+            </div>
+            
+            <div class="options-container" id="team1Options"></div>
+            
+            <div class="question-counter" id="team1Counter">Question: 0/10</div>
+        </div>
+
+        <div class="team-panel team2-panel">
+            <div class="team-header">
+                <div class="team-name">TEAM 2</div>
+                <div class="score-badge" id="team2ScoreBadge">0</div>
+            </div>
+            
+            <div class="question-box">
+                <div class="question-text" id="team2Question">Question will appear here</div>
+            </div>
+            
+            <div class="options-container" id="team2Options"></div>
+            
+            <div class="question-counter" id="team2Counter">Question: 0/10</div>
+        </div>
+
+        <div class="status-bar" style="grid-column: 1 / -1;">
+            <div class="status-item">
+                <div class="status-label">TEAM 1 SCORE</div>
+                <div class="status-value" id="team1Score">0</div>
+            </div>
+            <div class="status-item">
+                <div class="status-label">TIME ELAPSED</div>
+                <div class="status-value timer" id="timer">00:00</div>
+            </div>
+            <div class="status-item">
+                <div class="status-label">TEAM 2 SCORE</div>
+                <div class="status-value" id="team2Score">0</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const gameState = {
+            team1: { score: 0, currentQuestion: 0, canAnswer: false },
+            team2: { score: 0, currentQuestion: 0, canAnswer: false },
+            gameStarted: false,
+            startTime: null
+        };
+
+        // Helper function to shuffle array
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Helper function to create options with random correct answer position
+        function createRandomOptions(correctAnswer, wrongOptions) {
+            // Shuffle so correct answer can be in any position
+            return shuffleArray([correctAnswer, ...wrongOptions]);
+        }
+
+        // Five different question sets for Team 1 - English Language Grade 3
+        const team1QuestionSets = [
+            // Set 1 - Grammar, Vocabulary, Antonyms
+            [
+                { question: "What is the opposite of 'big'?", answer: "Small", wrongOptions: ["Large", "Huge"] },
+                { question: "Which is a noun?", answer: "Cat", wrongOptions: ["Run", "Happy"] },
+                { question: "Plural of 'child' is:", answer: "Children", wrongOptions: ["Childs", "Childrens"] },
+                { question: "A word that means 'small' is:", answer: "Tiny", wrongOptions: ["Big", "Large"] },
+                { question: "Which is a verb?", answer: "Jump", wrongOptions: ["Ball", "Red"] },
+                { question: "The opposite of 'hot' is:", answer: "Cold", wrongOptions: ["Warm", "Cool"] },
+                { question: "Past tense of 'go' is:", answer: "Went", wrongOptions: ["Goed", "Going"] },
+                { question: "Which word rhymes with 'cat'?", answer: "Hat", wrongOptions: ["Dog", "Bat"] },
+                { question: "The correct spelling is:", answer: "Beautiful", wrongOptions: ["Beautifull", "Beutiful"] },
+                { question: "A group of birds is called a:", answer: "Flock", wrongOptions: ["Herd", "Pack"] }
+            ],
+            // Set 2 - Parts of Speech, Spellings
+            [
+                { question: "Which article comes before 'apple'?", answer: "An", wrongOptions: ["A", "The"] },
+                { question: "Opposite of 'happy' is:", answer: "Sad", wrongOptions: ["Angry", "Excited"] },
+                { question: "The correct spelling is:", answer: "Friend", wrongOptions: ["Freind", "Frend"] },
+                { question: "Plural of 'man' is:", answer: "Men", wrongOptions: ["Mans", "Mens"] },
+                { question: "Which is a pronoun?", answer: "He", wrongOptions: ["Run", "Happy"] },
+                { question: "Past tense of 'come' is:", answer: "Came", wrongOptions: ["Comed", "Coming"] },
+                { question: "A word that means 'quick' is:", answer: "Fast", wrongOptions: ["Slow", "Heavy"] },
+                { question: "Opposite of 'new' is:", answer: "Old", wrongOptions: ["Fresh", "Young"] },
+                { question: "Which word rhymes with 'pen'?", answer: "Ten", wrongOptions: ["Pin", "Pan"] },
+                { question: "A group of fish is called a:", answer: "School", wrongOptions: ["Herd", "Flock"] }
+            ],
+            // Set 3 - More English Concepts
+            [
+                { question: "Which is an adjective?", answer: "Blue", wrongOptions: ["Run", "Car"] },
+                { question: "Opposite of 'up' is:", answer: "Down", wrongOptions: ["Top", "High"] },
+                { question: "The correct spelling is:", answer: "Different", wrongOptions: ["Diffrent", "Diferent"] },
+                { question: "Plural of 'baby' is:", answer: "Babies", wrongOptions: ["Babys", "Babie"] },
+                { question: "Which word starts with a vowel?", answer: "Elephant", wrongOptions: ["Ball", "Cat"] },
+                { question: "Past tense of 'eat' is:", answer: "Ate", wrongOptions: ["Eated", "Eating"] },
+                { question: "A word that means 'brave' is:", answer: "Courageous", wrongOptions: ["Scared", "Afraid"] },
+                { question: "Opposite of 'clean' is:", answer: "Dirty", wrongOptions: ["Neat", "Tidy"] },
+                { question: "Which word rhymes with 'cake'?", answer: "Make", wrongOptions: ["Cook", "Bake"] },
+                { question: "A group of cows is called a:", answer: "Herd", wrongOptions: ["Flock", "Pack"] }
+            ],
+            // Set 4 - Vocabulary and Grammar
+            [
+                { question: "Which is a preposition?", answer: "Under", wrongOptions: ["Happy", "Jump"] },
+                { question: "Opposite of 'light' is:", answer: "Dark", wrongOptions: ["Bright", "Shine"] },
+                { question: "The correct spelling is:", answer: "Because", wrongOptions: ["Becuase", "Becuse"] },
+                { question: "Plural of 'tooth' is:", answer: "Teeth", wrongOptions: ["Tooths", "Teeths"] },
+                { question: "Which is a common noun?", answer: "City", wrongOptions: ["London", "Paris"] },
+                { question: "Past tense of 'think' is:", answer: "Thought", wrongOptions: ["Thinked", "Thinking"] },
+                { question: "A word that means 'angry' is:", answer: "Mad", wrongOptions: ["Happy", "Glad"] },
+                { question: "Opposite of 'left' is:", answer: "Right", wrongOptions: ["Center", "Middle"] },
+                { question: "Which word rhymes with 'rain'?", answer: "Train", wrongOptions: ["Sun", "Cloud"] },
+                { question: "A group of ants is called a:", answer: "Colony", wrongOptions: ["Herd", "Flock"] }
+            ],
+            // Set 5 - Advanced Concepts
+            [
+                { question: "Which sentence is correct?", answer: "I am happy", wrongOptions: ["I is happy", "I are happy"] },
+                { question: "Opposite of 'front' is:", answer: "Back", wrongOptions: ["Side", "Forward"] },
+                { question: "The correct spelling is:", answer: "Tomorrow", wrongOptions: ["Tommorow", "Tommorrow"] },
+                { question: "Plural of 'goose' is:", answer: "Geese", wrongOptions: ["Gooses", "Geeses"] },
+                { question: "Which is a conjunction?", answer: "And", wrongOptions: ["Cat", "Blue"] },
+                { question: "Past tense of 'bring' is:", answer: "Brought", wrongOptions: ["Bringed", "Bringing"] },
+                { question: "A word that means 'pretty' is:", answer: "Beautiful", wrongOptions: ["Ugly", "Plain"] },
+                { question: "Opposite of 'open' is:", answer: "Closed", wrongOptions: ["Wide", "Shut"] },
+                { question: "Which word rhymes with 'night'?", answer: "Light", wrongOptions: ["Dark", "Day"] },
+                { question: "A group of players is called a:", answer: "Team", wrongOptions: ["Herd", "Flock"] }
+            ]
+        ];
+
+        // Five different question sets for Team 2 - English Language Grade 3
+        const team2QuestionSets = [
+            // Set 1 - Grammar, Vocabulary, Antonyms, Synonyms
+            [
+                { question: "What is the opposite of 'fast'?", answer: "Slow", wrongOptions: ["Quick", "Rapid"] },
+                { question: "Which is a verb?", answer: "Run", wrongOptions: ["Table", "Green"] },
+                { question: "Plural of 'box' is:", answer: "Boxes", wrongOptions: ["Boxs", "Boxies"] },
+                { question: "A word that means 'happy' is:", answer: "Joyful", wrongOptions: ["Sad", "Angry"] },
+                { question: "Which is a noun?", answer: "Dog", wrongOptions: ["Quickly", "Jump"] },
+                { question: "The opposite of 'good' is:", answer: "Bad", wrongOptions: ["Nice", "Kind"] },
+                { question: "Past tense of 'run' is:", answer: "Ran", wrongOptions: ["Runned", "Running"] },
+                { question: "Which word rhymes with 'sun'?", answer: "Fun", wrongOptions: ["Moon", "Star"] },
+                { question: "The correct spelling is:", answer: "School", wrongOptions: ["Skool", "Scool"] },
+                { question: "A group of lions is called a:", answer: "Pride", wrongOptions: ["Herd", "Pack"] }
+            ],
+            // Set 2 - Parts of Speech, Spellings, Sentences
+            [
+                { question: "Which article comes before 'orange'?", answer: "An", wrongOptions: ["A", "The"] },
+                { question: "Opposite of 'tall' is:", answer: "Short", wrongOptions: ["Long", "High"] },
+                { question: "The correct spelling is:", answer: "Teacher", wrongOptions: ["Techer", "Teachar"] },
+                { question: "Plural of 'mouse' is:", answer: "Mice", wrongOptions: ["Mouses", "Mices"] },
+                { question: "Which is an adjective?", answer: "Beautiful", wrongOptions: ["Run", "Book"] },
+                { question: "Past tense of 'see' is:", answer: "Saw", wrongOptions: ["Seen", "Seed"] },
+                { question: "A word that means 'afraid' is:", answer: "Scared", wrongOptions: ["Brave", "Happy"] },
+                { question: "Opposite of 'hard' is:", answer: "Soft", wrongOptions: ["Difficult", "Tough"] },
+                { question: "Which word rhymes with 'tree'?", answer: "Bee", wrongOptions: ["Leaf", "Branch"] },
+                { question: "A group of wolves is called a:", answer: "Pack", wrongOptions: ["Herd", "Flock"] }
+            ],
+            // Set 3 - More English Concepts
+            [
+                { question: "Which sentence is correct?", answer: "She is tall", wrongOptions: ["She am tall", "She are tall"] },
+                { question: "Opposite of 'early' is:", answer: "Late", wrongOptions: ["Soon", "Quick"] },
+                { question: "The correct spelling is:", answer: "Answer", wrongOptions: ["Anser", "Answar"] },
+                { question: "Plural of 'foot' is:", answer: "Feet", wrongOptions: ["Foots", "Feets"] },
+                { question: "Which is a preposition?", answer: "On", wrongOptions: ["Happy", "Run"] },
+                { question: "Past tense of 'make' is:", answer: "Made", wrongOptions: ["Maked", "Making"] },
+                { question: "A word that means 'intelligent' is:", answer: "Smart", wrongOptions: ["Dull", "Foolish"] },
+                { question: "Opposite of 'strong' is:", answer: "Weak", wrongOptions: ["Powerful", "Heavy"] },
+                { question: "Which word rhymes with 'book'?", answer: "Look", wrongOptions: ["Read", "Page"] },
+                { question: "A group of sheep is called a:", answer: "Flock", wrongOptions: ["Herd", "Pack"] }
+            ],
+            // Set 4 - Vocabulary Building
+            [
+                { question: "Which is a proper noun?", answer: "India", wrongOptions: ["country", "city"] },
+                { question: "Opposite of 'noisy' is:", answer: "Quiet", wrongOptions: ["Loud", "Busy"] },
+                { question: "The correct spelling is:", answer: "Children", wrongOptions: ["Childern", "Childran"] },
+                { question: "Plural of 'leaf' is:", answer: "Leaves", wrongOptions: ["Leafs", "Leav"] },
+                { question: "Which is an adverb?", answer: "Quickly", wrongOptions: ["Quick", "Speed"] },
+                { question: "Past tense of 'take' is:", answer: "Took", wrongOptions: ["Taked", "Taking"] },
+                { question: "A word that means 'difficult' is:", answer: "Hard", wrongOptions: ["Easy", "Simple"] },
+                { question: "Opposite of 'begin' is:", answer: "End", wrongOptions: ["Start", "Continue"] },
+                { question: "Which word rhymes with 'star'?", answer: "Car", wrongOptions: ["Moon", "Sky"] },
+                { question: "A group of bees is called a:", answer: "Swarm", wrongOptions: ["Herd", "Pack"] }
+            ],
+            // Set 5 - Grammar and Usage
+            [
+                { question: "Which pronoun is plural?", answer: "They", wrongOptions: ["He", "She"] },
+                { question: "Opposite of 'empty' is:", answer: "Full", wrongOptions: ["Blank", "Void"] },
+                { question: "The correct spelling is:", answer: "Nothing", wrongOptions: ["Nothin", "Nothink"] },
+                { question: "Plural of 'knife' is:", answer: "Knives", wrongOptions: ["Knifes", "Knive"] },
+                { question: "Which is an interjection?", answer: "Wow", wrongOptions: ["Run", "Happy"] },
+                { question: "Past tense of 'teach' is:", answer: "Taught", wrongOptions: ["Teached", "Teaching"] },
+                { question: "A word that means 'calm' is:", answer: "Peaceful", wrongOptions: ["Angry", "Loud"] },
+                { question: "Opposite of 'young' is:", answer: "Old", wrongOptions: ["New", "Fresh"] },
+                { question: "Which word rhymes with 'house'?", answer: "Mouse", wrongOptions: ["Home", "Room"] },
+                { question: "A group of elephants is called a:", answer: "Herd", wrongOptions: ["Pack", "Flock"] }
+            ]
+        ];
+
+        // Track used sets to avoid repetition
+        let usedSets = [];
+        let selectedSetIndex;
+
+        // Function to get a new set index (different from previous ones)
+        function getNewSetIndex() {
+            if (usedSets.length >= 5) {
+                // All sets used, reset
+                usedSets = [];
+            }
+            
+            let availableSets = [0, 1, 2, 3, 4].filter(i => !usedSets.includes(i));
+            let newIndex = availableSets[Math.floor(Math.random() * availableSets.length)];
+            usedSets.push(newIndex);
+            
+            return newIndex;
+        }
+
+        // Initialize with a random set
+        selectedSetIndex = getNewSetIndex();
+        let team1Questions = team1QuestionSets[selectedSetIndex].map(q => ({
+            question: q.question,
+            answer: q.answer,
+            options: createRandomOptions(q.answer, q.wrongOptions)
+        }));
+        let team2Questions = team2QuestionSets[selectedSetIndex].map(q => ({
+            question: q.question,
+            answer: q.answer,
+            options: createRandomOptions(q.answer, q.wrongOptions)
+        }));
+
+        function startGame() {
+            document.getElementById('startScreen').style.display = 'none';
+            gameState.gameStarted = true;
+            gameState.startTime = Date.now();
+            
+            loadQuestion('team1');
+            loadQuestion('team2');
+            startTimer();
+        }
+
+        function loadQuestion(team) {
+            const questionIndex = gameState[team].currentQuestion;
+            const questions = team === 'team1' ? team1Questions : team2Questions;
+            
+            if (questionIndex < questions.length) {
+                const questionData = questions[questionIndex];
+                document.getElementById(`${team}Question`).textContent = questionData.question;
+                document.getElementById(`${team}Counter`).textContent = `Question: ${questionIndex + 1}/10`;
+                
+                // Create options with shuffled positions
+                const optionsContainer = document.getElementById(`${team}Options`);
+                optionsContainer.innerHTML = '';
+                
+                questionData.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.className = 'option-btn';
+                    button.textContent = option;
+                    button.onclick = () => checkAnswer(team, option, questionData.answer, button);
+                    optionsContainer.appendChild(button);
+                });
+                
+                gameState[team].canAnswer = true;
+            } else {
+                checkGameOver();
+            }
+        }
+
+        function checkAnswer(team, selectedAnswer, correctAnswer, clickedButton) {
+            if (!gameState[team].canAnswer) return;
+            
+            gameState[team].canAnswer = false;
+            const optionsContainer = document.getElementById(`${team}Options`);
+            const allButtons = optionsContainer.querySelectorAll('.option-btn');
+            
+            // Disable all buttons
+            allButtons.forEach(btn => btn.disabled = true);
+            
+            if (selectedAnswer === correctAnswer) {
+                clickedButton.classList.add('correct');
+                gameState[team].score++;
+                document.getElementById(`${team}Score`).textContent = gameState[team].score;
+                document.getElementById(`${team}ScoreBadge`).textContent = gameState[team].score;
+            } else {
+                clickedButton.classList.add('incorrect');
+                // Highlight the correct answer
+                allButtons.forEach(btn => {
+                    if (btn.textContent === correctAnswer) {
+                        btn.classList.add('correct');
+                    }
+                });
+            }
+
+            gameState[team].currentQuestion++;
+            
+            setTimeout(() => {
+                loadQuestion(team);
+                updateRopePosition();
+            }, 2000);
+        }
+
+        function updateRopePosition() {
+            const team1Char = document.getElementById('team1Character');
+            const team2Char = document.getElementById('team2Character');
+            const scoreDiff = gameState.team2.score - gameState.team1.score;
+            const maxMove = 35;
+            const movePercent = Math.max(-maxMove, Math.min(maxMove, scoreDiff * 5));
+
+            team1Char.style.left = `${15 + movePercent}%`;
+            team2Char.style.left = `${85 + movePercent}%`;
+        }
+
+        function checkGameOver() {
+            if (gameState.team1.currentQuestion >= 10 && gameState.team2.currentQuestion >= 10) {
+                setTimeout(endGame, 500);
+            }
+        }
+
+        function endGame() {
+            const gameOverDiv = document.getElementById('gameOver');
+            const winnerText = document.getElementById('winnerText');
+            const finalScore = document.getElementById('finalScore');
+
+            if (gameState.team1.score > gameState.team2.score) {
+                winnerText.textContent = '🏆 TEAM 1 WINS! 🏆';
+                winnerText.style.color = '#1976D2';
+            } else if (gameState.team2.score > gameState.team1.score) {
+                winnerText.textContent = '🏆 TEAM 2 WINS! 🏆';
+                winnerText.style.color = '#D32F2F';
+            } else {
+                winnerText.textContent = '🤝 IT\'S A TIE! 🤝';
+                winnerText.style.color = '#FF9800';
+            }
+
+            finalScore.textContent = `Final Score - Team 1: ${gameState.team1.score} | Team 2: ${gameState.team2.score}`;
+            gameOverDiv.style.display = 'flex';
+        }
+
+        function restartGame() {
+            // Get a NEW set index (different from previous)
+            selectedSetIndex = getNewSetIndex();
+            
+            // Load new question sets with randomized options
+            team1Questions = team1QuestionSets[selectedSetIndex].map(q => ({
+                question: q.question,
+                answer: q.answer,
+                options: createRandomOptions(q.answer, q.wrongOptions)
+            }));
+            team2Questions = team2QuestionSets[selectedSetIndex].map(q => ({
+                question: q.question,
+                answer: q.answer,
+                options: createRandomOptions(q.answer, q.wrongOptions)
+            }));
+            
+            // Reset game state
+            gameState.team1 = { score: 0, currentQuestion: 0, canAnswer: false };
+            gameState.team2 = { score: 0, currentQuestion: 0, canAnswer: false };
+            gameState.gameStarted = false;
+            gameState.startTime = null;
+            
+            // Reset UI
+            document.getElementById('team1Score').textContent = '0';
+            document.getElementById('team2Score').textContent = '0';
+            document.getElementById('team1ScoreBadge').textContent = '0';
+            document.getElementById('team2ScoreBadge').textContent = '0';
+            document.getElementById('timer').textContent = '00:00';
+            document.getElementById('team1Character').style.left = '15%';
+            document.getElementById('team2Character').style.left = '85%';
+            
+            // Hide game over screen and start new game
+            document.getElementById('gameOver').style.display = 'none';
+            startGame();
+        }
+
+        function startTimer() {
+            setInterval(() => {
+                if (gameState.gameStarted && gameState.startTime) {
+                    const elapsed = Math.floor((Date.now() - gameState.startTime) / 1000);
+                    const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
+                    const seconds = (elapsed % 60).toString().padStart(2, '0');
+                    document.getElementById('timer').textContent = `${minutes}:${seconds}`;
+                }
+            }, 1000);
+        }
+
+        // Initialize character positions
+        document.getElementById('team1Character').style.left = '15%';
+        document.getElementById('team2Character').style.left = '85%';
+    </script>
+</body>
+</html>
